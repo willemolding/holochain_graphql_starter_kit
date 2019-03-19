@@ -1,17 +1,26 @@
 use std::rc::Rc;
 use std::cell::RefCell;
 
-use juniper::{FieldError, FieldResult, Value, ID};
+use juniper::{FieldResult, ID};
 
 use crate::cache::Cache;
+
+mod widget;
+use widget::Widget;
 
 /*=====================================
 =            Input Objects            =
 =====================================*/
-// This is the process of defining a graphQL Input object that a function will receive
+// This is the process of defining a graphQL Input type
+// https://graphql.org/learn/schema/#input-types
+
 #[derive(GraphQLInputObject)]
+#[graphql(description="An input object for example purposes only")]
 struct ExampleInput {
-    participant_ids: Option<Vec<Option<String>>>,
+    /// this rustdoc string (triple slash) will be visible when querying the endpoint for documentation
+    some_required_field: i32,
+    /// this field is optional
+    some_optional_field: Option<String>,
 }
 
 /*=====  End of Input Objects  ======*/
@@ -24,6 +33,22 @@ struct ExampleInput {
 
 pub struct Query;
 graphql_object!(Query: Context |&self| {
+
+    /// returns the API version. Mostly for testing/example purposes
+    field apiVersion() -> FieldResult<&str> {
+        Ok("1.0")
+    }
+
+    /// retrieve a single widget by its ID. Subqueries can then return info about this widget
+    field widget(address: ID) -> FieldResult<Widget> {
+        Ok(Widget{address})
+    }
+
+    /// return all the available widgets
+    field widgets(&executor) -> FieldResult<Vec<Widget>> {
+        Ok(Vec::new())
+    }
+
 });
 
 
@@ -34,6 +59,7 @@ graphql_object!(Query: Context |&self| {
  */
 pub struct Mutation;
 graphql_object!(Mutation: Context |&self| {
+
 });
 
 
@@ -41,6 +67,8 @@ graphql_object!(Mutation: Context |&self| {
 
 // define the context struct that is passed between all field calls in a query
 // This is used to cache holochain calls to make queries much more efficient
+// Without this cache there would be a get call for every field of every entry!
+// No changes need to be made to the context for normal usage
 pub struct Context {
     pub cache: Rc<RefCell<Cache>>
 }
