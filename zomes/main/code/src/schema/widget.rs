@@ -1,15 +1,17 @@
-use juniper::{FieldResult, ID};
+use juniper::{ID, FieldResult};
+use crate::holochain_juniper::HID;
 use crate::Context;
 use super::widget_entry;
 
 /*
  * Each GraphQL object which is also a Holochain entry must be defined by a single struct with an address field
+ * This field should have the HID type which is a merge between a GraphQL ID and a holochain address.
  * This address is the hash/DHT address in Holochain and is all that is needed to uniquely define an object
  * Do not include any of the entry fields here! They belong in the next macro
 */
 #[derive(Clone)]
 pub struct Widget {
-    pub address: ID,
+    pub address: HID,
 }
 
 /*
@@ -19,15 +21,15 @@ pub struct Widget {
 graphql_object!(Widget: Context |&self| {
 
 	/// The holochain hash/address of the widget entry
-	field address(&executor) -> FieldResult<&ID> {
-		Ok(&self.address)
+	field address(&executor) -> FieldResult<ID> {
+		Ok(self.address.clone().into())
 	}
 
 	/// The description this widget holds. That is all it really does.
 	field description(&executor) -> FieldResult<String> {
 		let widget = widget_entry::get_widget(
 			executor.context().cache.borrow_mut(),
-			&self.address.to_string().into()
+			&self.address.clone().into()
 		)?;
 		Ok(widget.description)
 	}
@@ -40,7 +42,7 @@ graphql_object!(Widget: Context |&self| {
 		)?;
 
 		let widgets = subwidget_addresses.iter().map(|address| {
-			Widget{address: address.to_string().into()}
+			Widget{address: address.to_owned().into()}
 		}).collect();
 
 		Ok(widgets)

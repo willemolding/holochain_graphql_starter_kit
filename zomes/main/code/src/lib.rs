@@ -26,12 +26,13 @@ mod cache;
 
 // entries
 mod widget_entry;
+mod holochain_juniper;
 
 use crate::schema::{Mutation, Query, Schema, Context};
 
 
 define_zome! {
-    entries: [
+    entries: [ // put the defs for any new entries here
         widget_entry::def()
     ]
 

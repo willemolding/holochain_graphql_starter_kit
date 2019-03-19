@@ -1,0 +1,32 @@
+[[agents]]
+id = "agent1"
+name = "HoloTester1"
+public_address = "HcScjjHjtart4kogk9R9JPRJpJ54mvxm5KBBCDiorimfcv3p4WuzSYAIBtqaier"
+key_file = "/home/willem/.config/holochain/keys/HcScjjHjtart4kogk9R9JPRJpJ54mvxm5KBBCDiorimfcv3p4WuzSYAIBtqaier"
+
+
+[[dnas]]
+id = "dna"
+file = "./dist/holochain_graphql_starter_kit.dna.json"
+
+
+[[instances]]
+id = "gql-example"
+dna = "dna"
+agent = "agent1"
+[instances.logger]
+type = "simple"
+file = "app_spec.log"
+[instances.storage]
+type = "memory"
+
+
+[[interfaces]]
+id = "http-interface"
+[interfaces.driver]
+type = "http"
+port = 3001
+[[interfaces.instances]]
+id = "gql-example"
+
+#===================================================================

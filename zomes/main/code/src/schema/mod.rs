@@ -2,7 +2,6 @@ use std::rc::Rc;
 use std::cell::RefCell;
 
 use juniper::{FieldResult, ID};
-
 use crate::cache::Cache;
 
 mod widget;
@@ -42,7 +41,7 @@ graphql_object!(Query: Context |&self| {
 
     /// retrieve a single widget by its ID. Subqueries can then return info about this widget
     field widget(address: ID) -> FieldResult<Widget> {
-        Ok(Widget{address})
+        Ok(Widget{address: address.into()})
     }
 
     /// create/return the root of the widget tree
@@ -51,7 +50,7 @@ graphql_object!(Query: Context |&self| {
             executor.context().cache.borrow_mut(),
             "root".to_string()
         )?;
-        Ok(Widget{address: root_widget_address.to_string().into()})
+        Ok(Widget{address: root_widget_address.into()})
     }
 
 });
@@ -71,7 +70,7 @@ graphql_object!(Mutation: Context |&self| {
             executor.context().cache.borrow_mut(),
             description
         )?;
-        Ok(Widget{address: new_widget_address.to_string().into()})
+        Ok(Widget{address: new_widget_address.into()})
     }
 
     /// Add one widget as a subwidget of another. Can be used to make widget trees!
@@ -81,7 +80,7 @@ graphql_object!(Mutation: Context |&self| {
             &parent_address.to_string().into(),
             &child_address.to_string().into(),
         )?;
-        Ok(Widget{address: child_address})
+        Ok(Widget{address: child_address.into()})
     }
 
 });
