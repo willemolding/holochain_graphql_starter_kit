@@ -33,6 +33,7 @@ struct ExampleInput {
 
 pub struct Query;
 graphql_object!(Query: Context |&self| {
+    description: "The top level query object for the holochain+graphQL starter kit!"
 
     /// returns the API version. Mostly for testing/example purposes
     field apiVersion() -> FieldResult<&str> {
@@ -63,6 +64,7 @@ graphql_object!(Query: Context |&self| {
  */
 pub struct Mutation;
 graphql_object!(Mutation: Context |&self| {
+    description: "by convention these callbacks are allowed to mutate the DHT or local chain"
 
     /// Add a new widget with a given description
     field addWidget(&executor, description: String) -> FieldResult<Widget> {

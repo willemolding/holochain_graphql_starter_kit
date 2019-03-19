@@ -19,6 +19,7 @@ pub struct Widget {
  * Every Holochain GraphQL object needs to expose an address field
 */
 graphql_object!(Widget: Context |&self| {
+	description: "The description fields in the code will included in the graphql server docs!. This is a simple widget that holds a description"
 
 	/// The holochain hash/address of the widget entry
 	field address(&executor) -> FieldResult<ID> {

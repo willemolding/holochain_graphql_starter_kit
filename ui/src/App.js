@@ -30,7 +30,7 @@ function graphQLFetcher(graphQLParams) {
   .then(json => json.result)
   .then(result => {
     const resultJson = JSON.parse(result)
-    return resultJson.Ok ? JSON.parse(resultJson.Ok) : resultJson
+    return resultJson.Ok ? { data: JSON.parse(resultJson.Ok) } : resultJson
   })
 }
 
