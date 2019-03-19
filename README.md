@@ -10,13 +10,84 @@ At the moment there is a fair bit of boilerplate code required. Entities must be
 
 ## Building the DNA
 
+Ensure you have the holochain CLI `hc` version 0.0.6-alpha on your path and run
+
+```
+hc package
+```
+
 ## Running the DNA in the conductor
+
+Ensure you have the holochain donductor `holochain` version 0.0.6-alpha on your path and run
+
+```
+holochain -c ./conductor-config.toml
+```
+
+This will ask for passphrase. Just press enter to start the conductor.
 
 ## Connecting the UI
 
+The simplest way to start the UI is to use the node dev server. First make sure the conductor is running then run the following
+
+```
+cd ui
+npm install
+npm run start
+```
+
+This will open up the UI on `http://localhost:3000`. The UI is configured to connect to the conductor via HTTP on port 3001. 
+
+The UI is a GraphiQL interface. You can browser the auto-generated documentation for the server on the right panel and type your own queries to execute on the left. Try pasting the following to get started (make sure you run them in the correct order):
+
+```
+{ apiVersion }
+```
+
+```
+{
+  rootWidget {
+    address
+    description
+  }
+}
+```
+
+```
+mutation {
+  addWidget(description: "brand new widget") {
+    address
+  }
+}
+```
+
+```
+mutation {
+  appendSubwidget(
+    parentAddress: "QmXmZwSpqKJ9ctDSeBvKiCfHqCi7c8M3zdcmQpBgAaU95k", 
+    childAddress: "QmT2TEDUhBysJNMsCqp57uPBGMKCzCpC2R869n2VbAMb1v"
+    ) { 
+    address
+  }
+}
+```
+
+```
+{
+  rootWidget {
+    description
+    subwidgets { description }
+  }
+}
+```
+
 ## Running the tests
 
-Explain how to run the automated tests for this system
+The tests for the DNA can be run from the project root by running
+
+```
+hc test
+```
 
 ## Built With
 
