@@ -1,8 +1,8 @@
 [[agents]]
 id = "agent1"
 name = "HoloTester1"
-public_address = "HcScjjHjtart4kogk9R9JPRJpJ54mvxm5KBBCDiorimfcv3p4WuzSYAIBtqaier"
-key_file = "/home/willem/.config/holochain/keys/HcScjjHjtart4kogk9R9JPRJpJ54mvxm5KBBCDiorimfcv3p4WuzSYAIBtqaier"
+public_address = "HcSCJdgKMXN47rh9vsfmHuo5VRRt9v3poRdNy84TV8Z4qcqhgC6zTeDAT3durna"
+key_file = "./temp-key.key"
 
 
 [[dnas]]
