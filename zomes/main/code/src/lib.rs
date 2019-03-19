@@ -24,11 +24,15 @@ use hdk::{
 mod schema;
 mod cache;
 
+// entries
+mod widget_entry;
+
 use crate::schema::{Mutation, Query, Schema, Context};
 
 
 define_zome! {
     entries: [
+        widget_entry::def()
     ]
 
     genesis: || { Ok(()) }

@@ -1,5 +1,6 @@
 use juniper::{FieldResult, ID};
 use crate::Context;
+use super::widget_entry;
 
 /*
  * Each GraphQL object which is also a Holochain entry must be defined by a single struct with an address field
@@ -21,12 +22,23 @@ graphql_object!(Widget: Context |&self| {
 		Ok(&self.address)
 	}
 
-	field description(&executor) -> FieldResult<&str> {
-		Ok("test")
+	field description(&executor) -> FieldResult<String> {
+		let widget = widget_entry::get_widget(
+			executor.context().cache.borrow_mut(),
+			&self.address.to_string().into()
+		)?;
+		Ok(widget.description)
 	}
 
 	field subwidgets(&executor) -> FieldResult<Vec<Widget>> {
-		Ok(Vec::new())
+		let subwidget_addresses = widget_entry::get_subwidgets(
+			executor.context().cache.borrow_mut(),
+			&self.address.to_string().into()
+		)?;
+		let widgets = subwidget_addresses.iter().map(|address| {
+			Widget{address: address.to_string().into()}
+		}).collect();
+		Ok(widgets)
 	}
 
 });

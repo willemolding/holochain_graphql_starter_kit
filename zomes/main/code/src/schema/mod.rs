@@ -7,6 +7,7 @@ use crate::cache::Cache;
 
 mod widget;
 use widget::Widget;
+use super::widget_entry;
 
 /*=====================================
 =            Input Objects            =
@@ -44,9 +45,13 @@ graphql_object!(Query: Context |&self| {
         Ok(Widget{address})
     }
 
-    /// return all the available widgets
-    field widgets(&executor) -> FieldResult<Vec<Widget>> {
-        Ok(Vec::new())
+    /// create/return the root of the widget tree
+    field rootWidget(&executor) -> FieldResult<Widget> {
+        let root_widget_address = widget_entry::add_widget(
+            executor.context().cache.borrow_mut(),
+            "root".to_string()
+        )?;
+        Ok(Widget{address: root_widget_address.to_string().into()})
     }
 
 });
@@ -59,6 +64,23 @@ graphql_object!(Query: Context |&self| {
  */
 pub struct Mutation;
 graphql_object!(Mutation: Context |&self| {
+
+    field addWidget(&executor, description: String) -> FieldResult<Widget> {
+        let new_widget_address = widget_entry::add_widget(
+            executor.context().cache.borrow_mut(),
+            description
+        )?;
+        Ok(Widget{address: new_widget_address.to_string().into()})
+    }
+
+    field appendSubwidget(&executor, parent_address: ID, child_address: ID) -> FieldResult<Widget> {
+        widget_entry::add_subwidget(
+            executor.context().cache.borrow_mut(),
+            &parent_address.to_string().into(),
+            &child_address.to_string().into(),
+        )?;
+        Ok(Widget{address: child_address})
+    }
 
 });
 

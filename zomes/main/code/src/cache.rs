@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use core::cell::RefMut;
 use core::convert::TryFrom;
 use std::collections::HashMap;
