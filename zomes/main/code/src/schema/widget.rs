@@ -18,10 +18,12 @@ pub struct Widget {
 */
 graphql_object!(Widget: Context |&self| {
 
+	/// The holochain hash/address of the widget entry
 	field address(&executor) -> FieldResult<&ID> {
 		Ok(&self.address)
 	}
 
+	/// The description this widget holds. That is all it really does.
 	field description(&executor) -> FieldResult<String> {
 		let widget = widget_entry::get_widget(
 			executor.context().cache.borrow_mut(),
@@ -30,14 +32,17 @@ graphql_object!(Widget: Context |&self| {
 		Ok(widget.description)
 	}
 
+	/// Retrieve all the subwidgets attached to this one as an array
 	field subwidgets(&executor) -> FieldResult<Vec<Widget>> {
 		let subwidget_addresses = widget_entry::get_subwidgets(
 			executor.context().cache.borrow_mut(),
 			&self.address.to_string().into()
 		)?;
+
 		let widgets = subwidget_addresses.iter().map(|address| {
 			Widget{address: address.to_string().into()}
 		}).collect();
+
 		Ok(widgets)
 	}
 

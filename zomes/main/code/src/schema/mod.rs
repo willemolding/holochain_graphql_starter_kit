@@ -65,6 +65,7 @@ graphql_object!(Query: Context |&self| {
 pub struct Mutation;
 graphql_object!(Mutation: Context |&self| {
 
+    /// Add a new widget with a given description
     field addWidget(&executor, description: String) -> FieldResult<Widget> {
         let new_widget_address = widget_entry::add_widget(
             executor.context().cache.borrow_mut(),
@@ -73,6 +74,7 @@ graphql_object!(Mutation: Context |&self| {
         Ok(Widget{address: new_widget_address.to_string().into()})
     }
 
+    /// Add one widget as a subwidget of another. Can be used to make widget trees!
     field appendSubwidget(&executor, parent_address: ID, child_address: ID) -> FieldResult<Widget> {
         widget_entry::add_subwidget(
             executor.context().cache.borrow_mut(),
