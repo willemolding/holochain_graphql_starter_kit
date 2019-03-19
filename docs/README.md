@@ -38,7 +38,11 @@ npm run start
 
 This will open up the UI on `http://localhost:3000`. The UI is configured to connect to the conductor via HTTP on port 3001. 
 
-The UI is a GraphiQL interface. You can browser the auto-generated documentation for the server on the right panel and type your own queries to execute on the left. Try pasting the following to get started (make sure you run them in the correct order):
+The UI is a GraphiQL interface. You can browser the auto-generated documentation for the server on the right panel and type your own queries to execute on the left. 
+
+![ui-screnshot](./ui-screenshot.png?raw=true)
+
+Try pasting the following to get started (make sure you run them in the correct order):
 
 ```
 { apiVersion }
