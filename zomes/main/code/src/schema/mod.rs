@@ -85,6 +85,19 @@ graphql_object!(Mutation: Context |&self| {
         Ok(Widget{address: child_address.into()})
     }
 
+    field addSubwidgetAsChild(&executor, parent_address: ID, description: String) -> FieldResult<Widget> {
+        let new_widget_address = widget_entry::add_widget(
+            executor.context().cache.borrow_mut(),
+            description
+        )?;
+        widget_entry::add_subwidget(
+            executor.context().cache.borrow_mut(),
+            &parent_address.to_string().into(),
+            &new_widget_address.to_string().into(),
+        )?;
+        Ok(Widget{address: new_widget_address.into()})
+    }
+
 });
 
 

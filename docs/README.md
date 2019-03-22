@@ -67,11 +67,9 @@ mutation {
 
 ```
 mutation {
-  appendSubwidget(
-    parentAddress: "QmXmZwSpqKJ9ctDSeBvKiCfHqCi7c8M3zdcmQpBgAaU95k", 
-    childAddress: "QmT2TEDUhBysJNMsCqp57uPBGMKCzCpC2R869n2VbAMb1v"
-    ) { 
-    address
+  addSubwidgetAsChild(parentAddress: "QmXmZwSpqKJ9ctDSeBvKiCfHqCi7c8M3zdcmQpBgAaU95k", description: "first child subwidget") {
+    address,
+    description
   }
 }
 ```
